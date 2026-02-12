@@ -3,12 +3,27 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Hello World</title>
+  <title>Face Age Estimator</title>
   <link href='/style.css' rel='stylesheet'>
 </head>
 <body>
-  <h1>Hello, world!</h1>
-  <button onclick="console.log('hello');">Press me</button>
+  <div class="container">
+    <h1>Face Age Estimator</h1>
+
+    <div class="camera-stream">
+      <video id="cameraFeed" autoplay playsinline></video>
+      <button id="captureButton">사진 촬영</button>
+    </div>
+
+    <div class="image-preview">
+      <img id="faceImage" src="#" alt="촬영된 얼굴 이미지">
+    </div>
+
+    <div id="ageResult">
+      <p>카메라로 사진을 촬영하여 나이를 추정하세요.</p>
+    </div>
+    <canvas id="hiddenCanvas" style="display:none;"></canvas>
+  </div>
   <script defer type="text/javascript" src="/main.js"></script>
 </body>
 </html>
