@@ -141,6 +141,8 @@ This blueprint outlines the development plan for a production-ready, fully stati
 23. Fix training start button issue (stable reaction test system):
     *   Adjust classic mode random delay to 2-5 seconds. (Completed)
     *   Implement explicit red-yellow-green color sequence for reaction box in classic mode using CSS classes. (Completed)
-    *   Refine `applySettingsButton` logic to prepare `startButton` for user interaction. (Completed)
+    *   Refine `applySettingsButton` logic to prepare `startButton` for user interaction, instead of programmatically clicking it. (Completed)
     *   Ensure `resetGame()` properly prepares `startButton` for a new game and clears all dynamic styles. (Completed)
     *   Refine `startColorReactionGame` to use class names for color changes. (Completed)
+    *   Update `training.html` with `data-cfasync="false"` for script include and change `id="start-button"` to `id="start-btn"`. (Completed)
+    *   Update `script.js` to use `id="start-btn"` and re-add console logs for debugging. (Completed)
