@@ -1,45 +1,93 @@
-# Project Blueprint: 저녁 메뉴 추천 웹사이트
+# Blueprint for FPS Reaction Time Training Web App
 
 ## Overview
+This blueprint outlines the development plan for a production-ready, fully static FPS Reaction Time Training web application. The app will be built using HTML, CSS, and Vanilla JavaScript, adhering to a "no backend" philosophy, and designed for optimal SEO and deployment on Cloudflare Pages.
 
-이 프로젝트는 사용자가 버튼을 클릭하면 저녁 식사 메뉴를 무작위로 추천해주고, 해당 메뉴에 대한 간단한 레시피 정보까지 제공하는 웹 애플리케이션을 만드는 것을 목표로 합니다. 사용자가 어떤 메뉴를 먹을지 고민할 때 도움을 주고, 더 나아가 실제로 요리하는 데 필요한 기본 정보까지 제공하여 유용성을 높입니다.
+## Project Requirements
+- Fully static site (HTML, CSS, Vanilla JS only)
+- No backend server
+- No Firebase database usage
+- No paid API usage
+- No external paid services
+- Google AdSense ready layout
+- SEO optimized
+- Cloudflare Pages deployment ready
 
-## Current State
+## Pages
+- `index.html` (Landing Page)
+- `training.html` (Reaction Time Training Game)
+- `blog.html` (Placeholder for articles)
+- `about.html` (About the app/project)
 
-*   기본 HTML, CSS, JavaScript 파일(`index.html`, `style.css`, `main.js`)이 존재합니다.
-*   프로젝트는 프레임워크를 사용하지 않는 웹 구조를 가집니다.
-*   버튼 클릭 시 무작위 저녁 메뉴를 추천하는 기능이 구현되어 있습니다.
-*   현대적이고 음식 테마에 맞는 시각적으로 매력적인 디자인이 적용되어 있습니다.
+## Features
+- Reaction time test
+- Millisecond score display
+- Best score stored in `localStorage`
+- Average score calculation
+- No real-time database
 
-## Implemented Features
+## SEO
+- Optimized title and description (`<title>`, `<meta name="description">`)
+- Proper heading structure (`<h1>`, `<h2>`, etc.)
+- Open Graph tags (`og:title`, `og:description`, `og:image`, etc.)
+- `sitemap.xml`
+- `robots.txt`
+- Structured data (JSON-LD)
 
-*   **사용자 인터페이스**:
-    *   페이지 제목: "저녁 메뉴 추천 (레시피 포함)"
-    *   메뉴 추천을 위한 버튼.
-    *   추천된 메뉴 이름과 해당 레시피를 표시하는 영역.
-*   **현대적인 스타일링**: 깔끔하고 직관적인 디자인, 음식 테마에 맞는 색상 및 레이아웃, 반응형 지원. 레시피 텍스트가 잘 보이도록 스타일링 개선.
-*   **메뉴 추천 및 레시피 로직**: JavaScript를 사용하여 미리 정의된 메뉴 및 레시피 목록에서 무작위로 하나를 선택하여 표시합니다.
+## Target Keywords
+- FPS reaction time test
+- Valorant aim training
+- Overwatch aim practice
+- Free FPS training site
 
-## Plan for Current Request (저녁 메뉴 추천 레시피 기능 추가)
+## Proposed Folder Structure
 
-현재 요청(추천 메뉴의 레시피 기능 추가)을 위해 다음 단계를 수행합니다.
+```
+/
+├── index.html
+├── training.html
+├── blog.html
+├── about.html
+├── style.css
+├── script.js
+├── sitemap.xml
+├── robots.txt
+├── blueprint.md
+├── assets/
+│   └── images/
+│       └── favicon.ico
+│   └── fonts/
+```
 
-1.  **`blueprint.md` 업데이트**: 이 문서를 현재 변경 사항(레시피 기능 추가)과 계획을 반영하여 업데이트합니다. (현재 단계)
+### Folder Structure Explanation
+-   **`/` (Root Directory):** Contains all primary HTML files, consolidated CSS/JS, and root-level SEO files (`sitemap.xml`, `robots.txt`).
+-   **`index.html`:** The landing page of the application.
+-   **`training.html`:** The page containing the FPS reaction time training game.
+-   **`blog.html`:** A placeholder for a blog or articles (though content won't be dynamic due to no backend).
+-   **`about.html`:** Information about the web app.
+-   **`style.css`:** Consolidated stylesheet for all global, layout, and component styles.
+-   **`script.js`:** Consolidated JavaScript file for all global and training game logic.
+-   **`sitemap.xml`:** XML sitemap for search engines.
+-   **`robots.txt`:** Directives for web crawlers.
+-   **`blueprint.md`:** Detailed plan and documentation for the project.
+-   **`assets/`:** Directory for static assets.
+    *   **`images/`:** For images, icons, and a `favicon.ico`.
+    *   **`fonts/`:** For custom web fonts.
 
-2.  **`main.js` 수정**:
-    *   `dinnerMenus` 배열을 수정하여 각 메뉴 항목이 `name` (메뉴 이름)과 `recipe` (간단한 레시피 설명) 속성을 가진 객체가 되도록 합니다.
-    *   `getRandomMenu` 함수를 업데이트하여 이제 메뉴 *객체*를 반환하도록 합니다.
-    *   이벤트 리스너 내에서 `menuRecommendation` 영역에 추천된 메뉴의 `name`과 `recipe`를 모두 표시하도록 로직을 수정합니다.
-
-3.  **`index.html` 수정**:
-    *   `menuRecommendation` `div` 내부에 메뉴 이름과 레시피를 별도의 요소(예: `<h3>`와 `<p>`)로 구분하여 표시할 수 있도록 구조를 조정합니다.
-    *   페이지 제목(`title` 및 `h1`)을 "저녁 메뉴 추천 (레시피 포함)"으로 업데이트하는 것을 고려합니다. (이전 단계에서 이미 변경되었으므로 필요시만)
-
-4.  **`style.css` 수정**:
-    *   `menuRecommendation` 내부의 메뉴 이름과 레시피 텍스트가 명확하게 구분되고 읽기 쉽도록 새로운 스타일 규칙을 추가합니다. (예: 폰트 크기, 색상, 여백 등)
-
-5.  **GitHub에 업로드**: 모든 변경 사항을 설명하는 커밋 메시지와 함께 GitHub 저장소에 푸시합니다.
-
-6.  **정제 및 테스트**:
-    *   모든 요소가 기능적으로 작동하는지 확인하고 UI가 반응형인지 테스트합니다.
-    *   버튼 클릭 시 메뉴와 레시피가 올바르게 추천되고 표시되는지 확인합니다.
+## Current Plan:
+1.  Define the folder structure. (Completed)
+2.  Create `blueprint.md` with the overall plan and folder structure. (Completed)
+3.  Create the initial HTML files (`index.html`, `training.html`, `blog.html`, `about.html`) with basic boilerplate, SEO meta tags, and proper heading structure. (Completed)
+4.  Create initial CSS files (`style.css`, `css/components.css`, `css/layout.css`). (Completed)
+5.  Create initial JavaScript files (`main.js`, `js/training.js`, `js/global.js`). (Completed)
+6.  Create `sitemap.xml` and `robots.txt`. (Completed)
+7.  Add AdSense ready layout comments and placeholders. (Completed)
+8.  Implement the core reaction time test logic in `js/training.js`. (Completed)
+9.  Implement local storage for best score and average score. (Completed)
+10. Integrate global JavaScript functionalities and event listeners in `js/global.js`. (Completed)
+11. Add Open Graph tags to HTML files. (Completed)
+12. Implement Structured Data (JSON-LD) for relevant pages. (Completed)
+13. Consolidate JavaScript files into `script.js` and update HTML files. (Completed)
+14. Consolidate CSS files into `style.css` and update HTML files. (Completed)
+15. Delete old `js` and `css` directories and `main.js`. (Completed)
+16. Prepare for Cloudflare Pages deployment. (Pending)
