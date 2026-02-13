@@ -1,25 +1,26 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FPS Reaction Time Test - Improve Your Aim for Valorant & Overwatch</title>
-    <meta name="description" content="Test and improve your FPS reaction time for games like Valorant and Overwatch with our free online training site. Track your milliseconds, best scores, and average performance.">
-    <meta name="keywords" content="FPS reaction time test, Valorant aim training, Overwatch aim practice, Free FPS training site, aim trainer, reaction speed, online game training">
+    <title class="app-title">FPS 반응 속도 훈련기</title>
+    <meta name="description" content="발로란트, 오버워치 등 FPS 게임의 반응 속도를 테스트하고 향상시키세요. 무료 온라인 훈련 사이트에서 밀리초 단위로 최고 점수와 평균 성능을 추적하세요.">
+    <meta name="keywords" content="FPS 반응 속도 테스트, 발로란트 조준 훈련, 오버워치 조준 연습, 무료 FPS 훈련 사이트, 에임 트레이너, 반응 속도, 온라인 게임 훈련">
     <meta name="author" content="Gemini CLI">
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://www.yourwebsite.com/">
-    <meta property="og:title" content="FPS Reaction Time Test - Improve Your Aim for Valorant & Overwatch">
-    <meta property="og:description" content="Test and improve your FPS reaction time for games like Valorant and Overwatch with our free online training site. Track your milliseconds, best scores, and average performance.">
+    <meta property="og:title" content="FPS 반응 속도 훈련기">
+    <meta property="og:description" content="발로란트, 오버워치 등 FPS 게임의 반응 속도를 테스트하고 향상시키세요. 무료 온라인 훈련 사이트에서 밀리초 단위로 최고 점수와 평균 성능을 추적하세요.">
     <meta property="og:image" content="https://www.yourwebsite.com/assets/images/og-image.jpg">
+    <meta property="og:locale" content="ko_KR">
 
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image">
     <meta property="twitter:url" content="https://www.yourwebsite.com/">
-    <meta property="twitter:title" content="FPS Reaction Time Test - Improve Your Aim for Valorant & Overwatch">
-    <meta property="twitter:description" content="Test and improve your FPS reaction time for games like Valorant and Overwatch with our free online training site. Track your milliseconds, best scores, and average performance.">
+    <meta property="twitter:title" content="FPS 반응 속도 훈련기">
+    <meta property="twitter:description" content="발로란트, 오버워치 등 FPS 게임의 반응 속도를 테스트하고 향상시키세요. 무료 온라인 훈련 사이트에서 밀리초 단위로 최고 점수와 평균 성능을 추적하세요.">
     <meta property="twitter:image" content="https://www.yourwebsite.com/assets/images/twitter-image.jpg">
 
     <link rel="stylesheet" href="style.css">
@@ -30,7 +31,7 @@
     {
       "@context": "https://schema.org",
       "@type": "WebSite",
-      "name": "FPS Reaction Time Trainer",
+      "name": "FPS 반응 속도 훈련기",
       "url": "https://www.yourwebsite.com/",
       "potentialAction": {
         "@type": "SearchAction",
@@ -40,39 +41,40 @@
     }
     </script>
 </head>
-<body>
+<body id="index-page">
     <header>
         <nav>
-            <h1><a href="/">FPS Reaction Trainer</a></h1>
+            <h1><a href="/" class="app-title">FPS 반응 속도 훈련기</a></h1>
             <ul>
-                <li><a href="training.html">Train Your Reaction</a></li>
-                <li><a href="blog.html">Blog</a></li>
-                <li><a href="about.html">About</a></li>
+                <li><a href="training.html" class="nav-train">반응 훈련</a></li>
+                <li><a href="blog.html" class="nav-blog">블로그</a></li>
+                <li><a href="about.html" class="nav-about">소개</a></li>
+                <li><button id="lang-toggle" class="lang-toggle-button">ENG</button></li>
             </ul>
         </nav>
     </header>
 
     <main>
         <section id="hero">
-            <h2 class="seo-hidden">Improve Your FPS Reaction Time</h2>
-            <p>Sharpen your reflexes and dominate in your favorite FPS games.</p>
-            <a href="training.html" class="button">Start Training Now!</a>
+            <h2 class="seo-hidden">FPS 반응 속도 향상</h2>
+            <p class="hero-tagline">반사 신경을 날카롭게 다듬어 좋아하는 FPS 게임을 지배하세요.</p>
+            <a href="training.html" class="button hero-button">지금 훈련 시작!</a>
         </section>
 
         <section id="features">
-            <h2>Why Train With Us?</h2>
+            <h2 class="why-train-title">왜 저희와 함께 훈련해야 할까요?</h2>
             <div class="feature-list">
                 <div class="feature-item">
-                    <h3>Accurate Reaction Time Test</h3>
-                    <p>Measure your reaction speed in milliseconds with precision.</p>
+                    <h3 class="feature-accurate-title">정확한 반응 시간 테스트</h3>
+                    <p class="feature-accurate-desc">정밀하게 밀리초 단위로 반응 속도를 측정하세요.</p>
                 </div>
                 <div class="feature-item">
-                    <h3>Track Your Progress</h3>
-                    <p>Best scores and average reaction times are saved locally.</p>
+                    <h3 class="feature-progress-title">진행 상황 추적</h3>
+                    <p class="feature-progress-desc">최고 점수와 평균 반응 시간이 로컬에 저장됩니다.</p>
                 </div>
                 <div class="feature-item">
-                    <h3>Free & Browser-Based</h3>
-                    <p>No downloads, no subscriptions. Just pure aim training.</p>
+                    <h3 class="feature-free-title">무료 및 웹 기반</h3>
+                    <p class="feature-free-desc">다운로드나 구독 없이 순수한 조준 훈련만 가능합니다.</p>
                 </div>
             </div>
         </section>
@@ -80,14 +82,14 @@
         <!-- Google AdSense Placeholder -->
         <section id="adsense-ad-1" class="adsense-slot">
             <!-- AdSense ad code will go here -->
-            <p>Advertisement</p>
+            <p class="adsense-label">광고</p>
         </section>
         <!-- End Google AdSense Placeholder -->
     </main>
 
     <footer>
-        <p>&copy; 2026 FPS Reaction Trainer. All rights reserved.</p>
-        <p><a href="privacy.html">Privacy Policy</a> | <a href="terms.html">Terms of Service</a></p>
+        <p class="footer-rights">&copy; 2026 FPS 반응 속도 훈련기. 모든 권리 보유.</p>
+        <p><a href="privacy.html" class="footer-privacy">개인정보처리방침</a> | <a href="terms.html" class="footer-terms">이용약관</a></p>
     </footer>
 
     <script src="script.js"></script>

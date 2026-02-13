@@ -83,21 +83,30 @@ ul {
     border: 0;
 }
 
-/* AdSense Placeholder Styles */
-.adsense-slot {
-    background-color: #1c1f22;
-    border: 1px dashed var(--border-color);
-    padding: 1rem;
-    text-align: center;
-    margin: 2rem auto;
-    max-width: 728px; /* Common ad unit width */
-    color: var(--secondary-color);
-    font-size: 0.9rem;
+/* Language Toggle Button */
+.lang-toggle-button {
+    background-color: var(--secondary-color);
+    color: var(--light-color);
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background-color 0.3s ease;
+    margin-left: 1rem;
 }
 
-.adsense-slot p {
-    margin-bottom: 0;
+.lang-toggle-button:hover {
+    background-color: #5a6268;
 }
+
+@media (max-width: 768px) {
+    .lang-toggle-button {
+        margin-left: 0;
+        margin-top: 1rem;
+    }
+}
+
 
 /* Layout Styles */
 body {

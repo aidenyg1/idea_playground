@@ -1,25 +1,26 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Blog - FPS Reaction Time Test & Training Insights</title>
-    <meta name="description" content="Read articles and insights on improving FPS reaction time, aim training techniques, and strategies for popular games like Valorant and Overwatch.">
-    <meta name="keywords" content="FPS reaction time blog, aim training tips, Valorant strategies, Overwatch guides, gaming insights, reaction speed improvement">
+    <title class="blog-page-title">블로그 - FPS 반응 속도 테스트 및 훈련 통찰력</title>
+    <meta name="description" content="FPS 반응 속도 향상, 조준 훈련 기술, 발로란트 및 오버워치와 같은 인기 게임 전략에 대한 기사와 통찰력을 읽어보세요.">
+    <meta name="keywords" content="FPS 반응 속도 블로그, 조준 훈련 팁, 발로란트 전략, 오버워치 가이드, 게임 통찰력, 반응 속도 향상">
     <meta name="author" content="Gemini CLI">
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://www.yourwebsite.com/blog.html">
-    <meta property="og:title" content="Blog - FPS Reaction Time Test & Training Insights">
-    <meta property="og:description" content="Read articles and insights on improving FPS reaction time, aim training techniques, and strategies for popular games like Valorant and Overwatch.">
+    <meta property="og:title" content="블로그 - FPS 반응 속도 테스트 및 훈련 통찰력">
+    <meta property="og:description" content="FPS 반응 속도 향상, 조준 훈련 기술, 발로란트 및 오버워치와 같은 인기 게임 전략에 대한 기사와 통찰력을 읽어보세요.">
     <meta property="og:image" content="https://www.yourwebsite.com/assets/images/og-blog-image.jpg">
+    <meta property="og:locale" content="ko_KR">
 
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image">
     <meta property="twitter:url" content="https://www.yourwebsite.com/blog.html">
-    <meta property="twitter:title" content="Blog - FPS Reaction Time Test & Training Insights">
-    <meta property="twitter:description" content="Read articles and insights on improving FPS reaction time, aim training techniques, and strategies for popular games like Valorant and Overwatch.">
+    <meta property="twitter:title" content="블로그 - FPS 반응 속도 테스트 및 훈련 통찰력">
+    <meta property="twitter:description" content="FPS 반응 속도 향상, 조준 훈련 기술, 발로란트 및 오버워치와 같은 인기 게임 전략에 대한 기사와 통찰력을 읽어보세요.">
     <meta property="twitter:image" content="https://www.yourwebsite.com/assets/images/twitter-blog-image.jpg">
 
     <link rel="stylesheet" href="style.css">
@@ -30,39 +31,40 @@
     {
       "@context": "https://schema.org",
       "@type": "Blog",
-      "name": "FPS Reaction Time Blog",
-      "description": "Articles and resources for improving reaction time in FPS games.",
+      "name": "FPS 반응 속도 블로그",
+      "description": "FPS 게임에서 반응 시간 향상을 위한 기사 및 자료.",
       "url": "https://www.yourwebsite.com/blog.html"
     }
     </script>
 </head>
-<body>
+<body id="blog-page">
     <header>
         <nav>
-            <h1><a href="/">FPS Reaction Trainer</a></h1>
+            <h1><a href="/" class="app-title">FPS 반응 속도 훈련기</a></h1>
             <ul>
-                <li><a href="training.html">Train Your Reaction</a></li>
-                <li><a href="blog.html">Blog</a></li>
-                <li><a href="about.html">About</a></li>
+                <li><a href="training.html" class="nav-train">반응 훈련</a></li>
+                <li><a href="blog.html" class="nav-blog">블로그</a></li>
+                <li><a href="about.html" class="nav-about">소개</a></li>
+                <li><button id="lang-toggle" class="lang-toggle-button">ENG</button></li>
             </ul>
         </nav>
     </header>
 
     <main>
         <section id="blog-posts">
-            <h2>Latest Articles & Insights</h2>
+            <h2 class="blog-articles-heading">최신 기사 및 통찰력</h2>
             <div class="blog-list">
                 <article class="blog-post-summary">
-                    <h3><a href="article1.html">The Science Behind Reaction Time in FPS Games</a></h3>
-                    <p class="post-meta">Published on: February 13, 2026 by Admin</p>
-                    <p>Understanding how reaction time works is the first step to improving it. Learn about the cognitive and physiological factors...</p>
-                    <a href="article1.html" class="read-more">Read More</a>
+                    <h3 class="blog-article1-title"><a href="article1.html">FPS 게임 반응 속도 뒤에 숨겨진 과학</a></h3>
+                    <p class="post-meta blog-article1-meta">게시일: 2026년 2월 13일 관리자</p>
+                    <p class="blog-article1-summary">반응 속도가 어떻게 작동하는지 이해하는 것이 이를 향상시키는 첫 단계입니다. 인지적, 생리적 요인에 대해 알아보세요...</p>
+                    <a href="article1.html" class="read-more blog-read-more">더 읽기</a>
                 </article>
                 <article class="blog-post-summary">
-                    <h3><a href="article2.html">5 Drills to Improve Your Aim in Valorant</a></h3>
-                    <p class="post-meta">Published on: February 10, 2026 by Admin</p>
-                    <p>Valorant requires pinpoint accuracy. Here are five effective drills you can integrate into your daily training...</p>
-                    <a href="article2.html" class="read-more">Read More</a>
+                    <h3 class="blog-article2-title"><a href="article2.html">발로란트 조준 실력 향상을 위한 5가지 훈련</a></h3>
+                    <p class="post-meta blog-article2-meta">게시일: 2026년 2월 10일 관리자</p>
+                    <p class="blog-article2-summary">발로란트는 정확한 조준이 필요합니다. 매일 훈련에 통합할 수 있는 5가지 효과적인 훈련 방법을 소개합니다...</p>
+                    <a href="article2.html" class="read-more blog-read-more">더 읽기</a>
                 </article>
             </div>
             <!-- More articles can be added here -->
@@ -71,14 +73,14 @@
         <!-- Google AdSense Placeholder -->
         <section id="adsense-ad-3" class="adsense-slot">
             <!-- AdSense ad code will go here -->
-            <p>Advertisement</p>
+            <p class="adsense-label">광고</p>
         </section>
         <!-- End Google AdSense Placeholder -->
     </main>
 
     <footer>
-        <p>&copy; 2026 FPS Reaction Trainer. All rights reserved.</p>
-        <p><a href="privacy.html">Privacy Policy</a> | <a href="terms.html">Terms of Service</a></p>
+        <p class="footer-rights">&copy; 2026 FPS 반응 속도 훈련기. 모든 권리 보유.</p>
+        <p><a href="privacy.html" class="footer-privacy">개인정보처리방침</a> | <a href="terms.html" class="footer-terms">이용약관</a></p>
     </footer>
 
     <script src="script.js"></script>

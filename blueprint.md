@@ -12,6 +12,11 @@ This blueprint outlines the development plan for a production-ready, fully stati
 - Google AdSense ready layout
 - SEO optimized
 - Cloudflare Pages deployment ready
+- Default language: Korean
+- Add language toggle button (KOR / ENG)
+- Use a simple JSON-based translation system
+- Translate all UI text including buttons, headings, and messages
+- Keep SEO meta tags optimized for Korean keywords
 
 ## Pages
 - `index.html` (Landing Page)
@@ -53,6 +58,7 @@ This blueprint outlines the development plan for a production-ready, fully stati
 ├── sitemap.xml
 ├── robots.txt
 ├── blueprint.md
+├── translations.json
 ├── assets/
 │   └── images/
 │       └── favicon.ico
@@ -66,10 +72,11 @@ This blueprint outlines the development plan for a production-ready, fully stati
 -   **`blog.html`:** A placeholder for a blog or articles (though content won't be dynamic due to no backend).
 -   **`about.html`:** Information about the web app.
 -   **`style.css`:** Consolidated stylesheet for all global, layout, and component styles.
--   **`script.js`:** Consolidated JavaScript file for all global and training game logic.
+-   **`script.js`:** Consolidated JavaScript file for all global and training game logic, including translation system.
 -   **`sitemap.xml`:** XML sitemap for search engines.
 -   **`robots.txt`:** Directives for web crawlers.
 -   **`blueprint.md`:** Detailed plan and documentation for the project.
+-   **`translations.json`:** JSON file for language translations.
 -   **`assets/`:** Directory for static assets.
     *   **`images/`:** For images, icons, and a `favicon.ico`.
     *   **`fonts/`:** For custom web fonts.
@@ -90,4 +97,10 @@ This blueprint outlines the development plan for a production-ready, fully stati
 13. Consolidate JavaScript files into `script.js` and update HTML files. (Completed)
 14. Consolidate CSS files into `style.css` and update HTML files. (Completed)
 15. Delete old `js` and `css` directories and `main.js`. (Completed)
-16. Prepare for Cloudflare Pages deployment. (Pending)
+16. Prepare for Cloudflare Pages deployment. (Completed)
+17. Upload project to GitHub. (Completed)
+18. Add Korean language support:
+    *   Create `translations.json`. (Completed)
+    *   Modify `script.js` to implement translation system. (Completed)
+    *   Modify all HTML files to include `lang="ko"`, language toggle, translation classes, and Korean SEO meta tags. (Completed)
+    *   Add basic CSS for the language toggle button to `style.css`. (Completed)
