@@ -32,7 +32,9 @@ const elementsToTranslate = [
     { selector: '#game-selection option[value="valorant"]', key: 'game_valorant' },
     { selector: '#game-selection option[value="overwatch2"]', key: 'game_overwatch2' },
     { selector: '#game-selection option[value="pubg"]', key: 'game_pubg' },
-    { selector: '.sensitivity-label', key: 'sensitivity_label' },
+    { selector: '.mode-selection-label', key: 'mode_selection_label' },
+    { selector: '#mode-selection option[value="classic"]', key: 'mode_classic' },
+    { selector: '#mode-selection option[value="hardcore"]', key: 'mode_hardcore' },
     { selector: '.apply-settings-button', key: 'apply_settings_button' },
     { selector: '.blog-articles-heading', key: 'blog_articles_heading' },
     { selector: '.blog-article1-title', key: 'blog_article1_title' },
@@ -193,8 +195,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const gameArea = document.getElementById('game-area');
         const applySettingsButton = document.getElementById('apply-settings-button');
         const gameSelection = document.getElementById('game-selection');
-        const sensitivitySlider = document.getElementById('sensitivity-slider');
-        const sensitivityValueSpan = document.getElementById('sensitivity-value');
+        const modeSelection = document.getElementById('mode-selection'); // New
 
         const reactionBox = document.getElementById('reaction-box');
         const startButton = document.getElementById('start-button');
@@ -213,28 +214,24 @@ document.addEventListener('DOMContentLoaded', () => {
         // Game Settings
         let gameSettings = JSON.parse(localStorage.getItem('gameSettings')) || {
             game: 'valorant',
-            sensitivity: 50
+            mode: 'classic' // New default mode
         };
 
         // --- Settings UI Functions ---
         function loadSettings() {
             gameSelection.value = gameSettings.game;
-            sensitivitySlider.value = gameSettings.sensitivity;
-            sensitivityValueSpan.textContent = gameSettings.sensitivity;
+            modeSelection.value = gameSettings.mode; // Load mode setting
         }
 
         function saveSettings() {
             gameSettings.game = gameSelection.value;
-            gameSettings.sensitivity = parseInt(sensitivitySlider.value);
+            gameSettings.mode = modeSelection.value; // Save mode setting
             localStorage.setItem('gameSettings', JSON.stringify(gameSettings));
         }
 
         // --- Event Listeners for Settings ---
         gameSelection.addEventListener('change', saveSettings);
-        sensitivitySlider.addEventListener('input', () => {
-            sensitivityValueSpan.textContent = sensitivitySlider.value;
-            saveSettings();
-        });
+        modeSelection.addEventListener('change', saveSettings); // Save mode on change
 
         applySettingsButton.addEventListener('click', () => {
             saveSettings(); // Save settings when apply button is clicked
@@ -317,7 +314,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Initial setup for training page
         loadSettings(); // Load settings when page loads
-        if (gameSettings.game && gameSettings.sensitivity) { // If settings exist, show settings screen first
+        if (gameSettings.game && gameSettings.mode) { // If settings exist, show settings screen first
              settingsScreen.style.display = 'block';
              gameArea.style.display = 'none';
         } else { // Otherwise, directly show game area (or default to settings)

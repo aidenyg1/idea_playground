@@ -65,9 +65,11 @@
                     </select>
                 </div>
                 <div class="settings-group">
-                    <label for="sensitivity-slider" class="sensitivity-label">감도:</label>
-                    <input type="range" id="sensitivity-slider" min="1" max="100" value="50" class="settings-slider">
-                    <span id="sensitivity-value">50</span>
+                    <label for="mode-selection" class="mode-selection-label">모드 선택:</label>
+                    <select id="mode-selection" class="settings-select">
+                        <option value="classic" data-translate-value="mode_classic">클래식</option>
+                        <option value="hardcore" data-translate-value="mode_hardcore">하드코어</option>
+                    </select>
                 </div>
                 <button id="apply-settings-button" class="button apply-settings-button">훈련 시작!</button>
             </div>

@@ -32,8 +32,7 @@ This blueprint outlines the development plan for a production-ready, fully stati
 - No real-time database
 - Pre-game settings screen in `training.html`:
   - Game selection dropdown: Valorant, Overwatch 2, PUBG
-  - Sensitivity slider (1–100)
-  - Show selected sensitivity value
+  - Mode selection dropdown: Classic, Hardcore
   - Save selected settings in `localStorage`
   - Apply settings before game starts
   - Clean UI design matching dark gamer theme
@@ -116,3 +115,8 @@ This blueprint outlines the development plan for a production-ready, fully stati
     *   Modify `translations.json` to add new translation keys. (Completed)
     *   Modify `script.js` to implement settings logic (load/save, apply, UI interaction). (Completed)
     *   Modify `style.css` to add styling for settings screen. (Completed)
+20. Remove sensitivity setting completely from `training.html`:
+    *   Modify `training.html` to remove sensitivity UI. (Completed)
+    *   Modify `translations.json` to remove sensitivity keys and add mode selection keys. (Completed)
+    *   Modify `script.js` to remove sensitivity logic and integrate mode selection. (Completed)
+    *   Verify `style.css` does not require specific changes for sensitivity (Confirmed). (Completed)
