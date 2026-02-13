@@ -37,8 +37,9 @@ const elementsToTranslate = [
     { selector: '#mode-selection option[value="hardcore"]', key: 'mode_hardcore' },
     { selector: '#mode-selection option[value="color_reaction"]', key: 'mode_color_reaction' },
     { selector: '.apply-settings-button', key: 'apply_settings_button' },
-    { selector: '.rank-label', key: 'rank_label' },
-    { selector: '#estimated-rank', key: 'rank_iron' }, // Placeholder for initial translation, actual rank will be dynamic
+    // Temporarily removed rank labels for debugging scope
+    // { selector: '.rank-label', key: 'rank_label' },
+    // { selector: '#estimated-rank', key: 'rank_iron' },
     { selector: '.blog-articles-heading', key: 'blog_articles_heading' },
     { selector: '.blog-article1-title', key: 'blog_article1_title' },
     { selector: '.blog-article1-meta', key: 'blog_article1_meta' },
@@ -61,16 +62,19 @@ const elementsToTranslate = [
 ];
 
 async function loadTranslations() {
+    console.log("[script.js] Attempting to load translations...");
     try {
         const response = await fetch('/translations.json');
         translations = await response.json();
+        console.log("[script.js] Translations loaded:", translations);
         translateUI();
     } catch (error) {
-        console.error('Error loading translations:', error);
+        console.error('[script.js] Error loading translations:', error);
     }
 }
 
 function translateUI() {
+    console.log("[script.js] Translating UI for language:", currentLanguage);
     elementsToTranslate.forEach(item => {
         const elements = document.querySelectorAll(item.selector);
         elements.forEach(element => {
@@ -86,15 +90,15 @@ function translateUI() {
                 else {
                     element.textContent = translations[currentLanguage][item.key];
                 }
+            } else {
+                console.warn(`[script.js] Missing translation for key '${item.key}' in language '${currentLanguage}' for selector '${item.selector}'.`);
             }
         });
     });
 
-    // Translate specific attributes if necessary
     const htmlElement = document.documentElement;
     htmlElement.setAttribute('lang', currentLanguage);
 
-    // Update meta tags for SEO
     const metaDescription = document.querySelector('meta[name="description"]');
     const metaKeywords = document.querySelector('meta[name="keywords"]');
     const metaOgTitle = document.querySelector('meta[property="og:title"]');
@@ -104,7 +108,6 @@ function translateUI() {
     const titleElement = document.querySelector('title');
 
     if (translations[currentLanguage]) {
-        // Dynamic title update based on current page
         let pageSpecificTitleKey = '';
         let pageSpecificDescKey = '';
         if (document.body.id === 'training-page') {
@@ -117,8 +120,8 @@ function translateUI() {
             pageSpecificTitleKey = 'about_page_title';
             pageSpecificDescKey = 'about_page_desc';
         } else { // index page
-            pageSpecificTitleKey = 'app_title'; // Using app_title for index page title
-            pageSpecificDescKey = 'hero_tagline'; // Using hero_tagline for index page description
+            pageSpecificTitleKey = 'app_title';
+            pageSpecificDescKey = 'hero_tagline';
         }
 
         if (titleElement && translations[currentLanguage][pageSpecificTitleKey]) {
@@ -139,13 +142,8 @@ function translateUI() {
         if (metaTwitterDescription && translations[currentLanguage][pageSpecificDescKey]) {
             metaTwitterDescription.setAttribute('content', translations[currentLanguage][pageSpecificDescKey]);
         }
-
-        // Keywords are static for now but could be dynamic if needed
-        // For demonstration, keywords are generic per page, not translated directly.
-        // A more robust solution would have translated keyword lists in translations.json
     }
 
-    // Update language toggle button text
     const langToggleButton = document.getElementById('lang-toggle');
     if (langToggleButton) {
         langToggleButton.textContent = currentLanguage === 'ko' ? 'ENG' : 'KOR';
@@ -153,6 +151,7 @@ function translateUI() {
 }
 
 function setLanguage(lang) {
+    console.log("[script.js] Setting language to:", lang);
     currentLanguage = lang;
     localStorage.setItem('lang', lang);
     translateUI();
@@ -160,49 +159,45 @@ function setLanguage(lang) {
 
 // Global JavaScript functionalities
 document.addEventListener('DOMContentLoaded', () => {
-    console.log("Global JavaScript loaded and DOM is ready.");
+    console.log("[script.js] DOMContentLoaded fired.");
 
     loadTranslations().then(() => {
-        // Set initial language or default to Korean
         const storedLang = localStorage.getItem('lang');
         if (storedLang) {
             setLanguage(storedLang);
         } else {
-            setLanguage('ko'); // Default to Korean
+            setLanguage('ko');
         }
     });
 
-    // Smooth scroll for anchor links (if any)
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function (e) {
             e.preventDefault();
-
             document.querySelector(this.getAttribute('href')).scrollIntoView({
                 behavior: 'smooth'
             });
         });
     });
 
-    // Language Toggle Button Event Listener
     const langToggleButton = document.getElementById('lang-toggle');
     if (langToggleButton) {
         langToggleButton.addEventListener('click', () => {
+            console.log("[script.js] Language toggle button clicked.");
             const newLang = currentLanguage === 'ko' ? 'en' : 'ko';
             setLanguage(newLang);
         });
     }
 
-    // Core logic for the FPS Reaction Time Training game (only on training.html)
-    if (document.body.id === 'training-page') { // Add an ID to the body of training.html for conditional loading
+    if (document.body.id === 'training-page') {
+        console.log("[script.js] Training page specific logic initializing.");
+
         const settingsScreen = document.getElementById('settings-screen');
         const gameArea = document.getElementById('game-area');
         const applySettingsButton = document.getElementById('apply-settings-button');
         const gameSelection = document.getElementById('game-selection');
-        const modeSelection = document.getElementById('mode-selection'); // New
+        const modeSelection = document.getElementById('mode-selection');
 
-        const trainerInstruction = document.querySelector('.trainer-instruction'); // Get instruction element
-        const valorantRankDisplay = document.getElementById('valorant-rank-display'); // New
-        const estimatedRankSpan = document.getElementById('estimated-rank'); // New
+        const trainerInstruction = document.querySelector('.trainer-instruction');
 
         const reactionBox = document.getElementById('reaction-box');
         const startButton = document.getElementById('start-button');
@@ -217,90 +212,69 @@ document.addEventListener('DOMContentLoaded', () => {
         let waitingForClick = false;
         let scores = JSON.parse(localStorage.getItem('reactionScores')) || [];
         let bestScore = localStorage.getItem('bestReactionScore') || 0;
-        let currentColor = ''; // For Color Reaction Mode
+        let currentColor = ''; 
 
-        const colors = ['red', 'green', 'blue', 'yellow', 'purple', 'orange']; // Available colors
-        const targetColor = 'blue'; // Target color for Color Reaction Mode
+        const colors = ['red', 'green', 'blue', 'yellow', 'purple', 'orange'];
+        const targetColor = 'blue';
 
-        // Game Settings
         let gameSettings = JSON.parse(localStorage.getItem('gameSettings')) || {
             game: 'valorant',
-            mode: 'classic' // New default mode
+            mode: 'classic'
         };
 
-        // --- Settings UI Functions ---
         function loadSettings() {
+            console.log("[script.js] loadSettings called.");
             gameSelection.value = gameSettings.game;
-            modeSelection.value = gameSettings.mode; // Load mode setting
+            modeSelection.value = gameSettings.mode;
+            console.log("[script.js] Loaded game settings:", gameSettings);
         }
 
         function saveSettings() {
             gameSettings.game = gameSelection.value;
-            gameSettings.mode = modeSelection.value; // Save mode setting
+            gameSettings.mode = modeSelection.value;
             localStorage.setItem('gameSettings', JSON.stringify(gameSettings));
+            console.log("[script.js] Saved game settings:", gameSettings);
         }
 
-        // --- Event Listeners for Settings ---
         gameSelection.addEventListener('change', () => {
+            console.log("[script.js] Game selection changed.");
             saveSettings();
-            updateScoresDisplay(); // Update display for rank visibility
+            updateScoresDisplay();
         });
         modeSelection.addEventListener('change', () => {
+            console.log("[script.js] Mode selection changed.");
             saveSettings();
-            updateTrainerInstruction(); // Update instruction when mode changes
+            updateTrainerInstruction();
         });
 
         applySettingsButton.addEventListener('click', () => {
-            saveSettings(); // Save settings when apply button is clicked
+            console.log("[script.js] Apply Settings button clicked.");
+            saveSettings();
             settingsScreen.style.display = 'none';
             gameArea.style.display = 'block';
             resetGame(); // Ensure game is in a clean state
-            updateScoresDisplay(); // Update scores after settings are applied
-            updateTrainerInstruction(); // Update instruction based on selected mode
+            // Programmatically click the start button to ensure the game start flow is triggered
+            startButton.click();
+            updateScoresDisplay();
+            updateTrainerInstruction();
+            console.log("[script.js] Transitioned from settings to game area and triggered game start.");
         });
 
-        // --- Helper Functions ---
         function updateScoresDisplay() {
+            console.log("[script.js] updateScoresDisplay called.");
             if (scores.length > 0) {
                 const sum = scores.reduce((a, b) => a + b, 0);
                 const average = sum / scores.length;
                 averageScoreSpan.textContent = average.toFixed(0);
-
-                // Calculate and display Valorant rank if game is Valorant
-                if (gameSettings.game === 'valorant') {
-                    valorantRankDisplay.style.display = 'block';
-                    estimatedRankSpan.textContent = calculateValorantRank(average);
-                } else {
-                    valorantRankDisplay.style.display = 'none';
-                }
-
             } else {
                 averageScoreSpan.textContent = '0';
-                valorantRankDisplay.style.display = 'none'; // Hide if no scores
             }
             bestScoreSpan.textContent = bestScore;
+            console.log("[script.js] Scores updated. Last:", lastScoreSpan.textContent, "Best:", bestScore, "Avg:", averageScoreSpan.textContent);
         }
 
-        function calculateValorantRank(avgReactionTime) {
-            // This is a simplified estimation based on general human reaction times.
-            // Real Valorant rank depends on many factors.
-            if (avgReactionTime <= 150) return translations[currentLanguage]['rank_radiant'];
-            if (avgReactionTime <= 170) return translations[currentLanguage]['rank_immortal'];
-            if (avgReactionTime <= 190) return translations[currentLanguage]['rank_ascendant'];
-            if (avgReactionTime <= 210) return translations[currentLanguage]['rank_diamond'];
-            if (avgReactionTime <= 230) return translations[currentLanguage]['rank_platinum'];
-            if (avgReactionTime <= 250) return translations[currentLanguage]['rank_gold'];
-            if (avgReactionTime <= 280) return translations[currentLanguage]['rank_silver'];
-            if (avgReactionTime <= 320) return translations[currentLanguage]['rank_bronze'];
-            return translations[currentLanguage]['rank_iron'];
-        }
-
-        function saveScores() {
-            localStorage.setItem('reactionScores', JSON.stringify(scores));
-            localStorage.setItem('bestReactionScore', bestScore);
-        }
-        
         function updateTrainerInstruction() {
+            console.log("[script.js] updateTrainerInstruction called for mode:", gameSettings.mode);
             if (gameSettings.mode === 'color_reaction') {
                 trainerInstruction.textContent = translations[currentLanguage]['trainer_instruction_color_reaction'];
             } else {
@@ -309,30 +283,43 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         function resetGame() {
+            console.log("[script.js] resetGame called.");
             reactionBox.style.display = 'none';
-            reactionBox.className = ''; // Clear all classes
+            reactionBox.className = '';
+            // Restore start button to initial text and enable it
             startButton.textContent = translations[currentLanguage]['start_test_button'];
             startButton.disabled = false;
             clearTimeout(timeoutId);
             waitingForClick = false;
-            currentColor = ''; // Reset color for color reaction mode
+            currentColor = '';
+            console.log("[script.js] Game reset complete. Start button text:", startButton.textContent);
         }
 
-        // --- Game Logic ---
         startButton.addEventListener('click', () => {
+            console.log("[script.js] Start button clicked. Current mode:", gameSettings.mode);
+            // If the button is already disabled (e.g., during a game cycle), ignore further clicks
+            if (startButton.disabled && startButton.textContent !== translations[currentLanguage]['get_ready']) {
+                console.log("[script.js] Start button click ignored: already disabled or game in progress.");
+                return;
+            }
+
             startButton.disabled = true;
             startButton.textContent = translations[currentLanguage]['get_ready'];
             reactionBox.style.display = 'block';
 
             if (gameSettings.mode === 'color_reaction') {
-                reactionBox.className = 'color-cycle'; // Initial state for color reaction
+                console.log("[script.js] Starting Color Reaction Game.");
+                reactionBox.className = 'color-cycle';
                 startColorReactionGame();
             } else { // Classic mode
-                reactionBox.className = 'ready'; // Set to yellow
-                const randomDelay = Math.floor(Math.random() * 3000) + 1500; // 1.5 to 4.5 seconds
+                console.log("[script.js] Starting Classic Mode Game.");
+                reactionBox.className = 'ready';
+                const randomDelay = Math.floor(Math.random() * 3000) + 1500;
+                console.log("[script.js] Classic mode: Random delay set to", randomDelay, "ms.");
 
                 timeoutId = setTimeout(() => {
-                    reactionBox.className = 'go'; // Set to green
+                    console.log("[script.js] Classic mode: Delay finished, box turning green.");
+                    reactionBox.className = 'go';
                     startTime = new Date().getTime();
                     waitingForClick = true;
                     startButton.textContent = translations[currentLanguage]['click_now'];
@@ -341,24 +328,28 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         function startColorReactionGame() {
+            console.log("[script.js] startColorReactionGame called.");
             let cycleCount = 0;
-            const maxCycles = 10; // Max random color changes before target
-            const minCycles = 3;  // Min random color changes before target
+            const maxCycles = 10;
+            const minCycles = 3;
             const randomMaxCycles = Math.floor(Math.random() * (maxCycles - minCycles + 1)) + minCycles;
+            console.log("[script.js] Color Reaction: Will cycle", randomMaxCycles, "times before target color.");
 
             function changeColor() {
                 if (!waitingForClick && cycleCount < randomMaxCycles) {
                     let randomColor;
                     do {
                         randomColor = colors[Math.floor(Math.random() * colors.length)];
-                    } while (randomColor === currentColor); // Avoid same color twice in a row
+                    } while (randomColor === currentColor);
                     
                     reactionBox.style.backgroundColor = randomColor;
                     currentColor = randomColor;
                     cycleCount++;
+                    console.log("[script.js] Color Reaction: Changed color to", currentColor, "(cycle", cycleCount, ")");
 
-                    timeoutId = setTimeout(changeColor, Math.random() * 500 + 300); // Change color every 0.3-0.8 seconds
-                } else if (!waitingForClick) { // Time to show target color
+                    timeoutId = setTimeout(changeColor, Math.random() * 500 + 300);
+                } else if (!waitingForClick) {
+                    console.log("[script.js] Color Reaction: Delay finished, box turning target color (", targetColor, ").");
                     reactionBox.style.backgroundColor = targetColor;
                     currentColor = targetColor;
                     startTime = new Date().getTime();
@@ -370,6 +361,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         reactionBox.addEventListener('click', () => {
+            console.log("[script.js] Reaction box clicked. Waiting for click:", waitingForClick, "Current color:", currentColor);
             if (gameSettings.mode === 'color_reaction') {
                 if (waitingForClick) {
                     if (currentColor === targetColor) {
@@ -384,15 +376,16 @@ document.addEventListener('DOMContentLoaded', () => {
                         updateScoresDisplay();
                         saveScores();
                         resetGame();
+                        console.log("[script.js] Color Reaction: Correct click. Reaction time:", reactionTime);
                     } else {
-                        // Clicked on wrong color
                         alert(translations[currentLanguage]['alert_wrong_color']);
                         resetGame();
+                        console.log("[script.js] Color Reaction: Clicked on wrong color.");
                     }
                 } else {
-                    // Clicked too early (before target color appeared)
-                    alert(translations[currentLanguage]['alert_wrong_color']); // Using wrong color alert for early click
+                    alert(translations[currentLanguage]['alert_wrong_color']);
                     resetGame();
+                    console.log("[script.js] Color Reaction: Clicked too early (before target color).");
                 }
             } else { // Classic mode
                 if (waitingForClick) {
@@ -407,27 +400,34 @@ document.addEventListener('DOMContentLoaded', () => {
                     updateScoresDisplay();
                     saveScores();
                     resetGame();
+                    console.log("[script.js] Classic Mode: Correct click. Reaction time:", reactionTime);
                 } else if (reactionBox.classList.contains('ready')) {
-                    // Clicked too early
                     alert(translations[currentLanguage]['alert_too_early']);
                     resetGame();
+                    console.log("[script.js] Classic Mode: Clicked too early (box was yellow).");
+                } else {
+                     console.log("[script.js] Classic Mode: Clicked before ready state or after game ended. Ignoring.");
                 }
             }
         });
 
         resetScoresButton.addEventListener('click', () => {
+            console.log("[script.js] Reset Scores button clicked.");
             scores = [];
             bestScore = 0;
             lastScoreSpan.textContent = '0';
             saveScores();
             updateScoresDisplay();
+            resetGame(); // Ensure game is reset after clearing scores
+            console.log("[script.js] Scores reset.");
         });
 
         // Initial setup for training page
-        loadSettings(); // Load settings when page loads
-        settingsScreen.style.display = 'block'; // Always start with settings
+        loadSettings();
+        settingsScreen.style.display = 'block';
         gameArea.style.display = 'none';
         updateScoresDisplay();
-        updateTrainerInstruction(); // Initial instruction update
+        updateTrainerInstruction();
+        console.log("[script.js] Training page initial setup complete.");
     }
 });
