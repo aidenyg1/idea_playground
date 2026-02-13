@@ -37,6 +37,8 @@ const elementsToTranslate = [
     { selector: '#mode-selection option[value="hardcore"]', key: 'mode_hardcore' },
     { selector: '#mode-selection option[value="color_reaction"]', key: 'mode_color_reaction' },
     { selector: '.apply-settings-button', key: 'apply_settings_button' },
+    { selector: '.rank-label', key: 'rank_label' },
+    { selector: '#estimated-rank', key: 'rank_iron' }, // Placeholder for initial translation, actual rank will be dynamic
     { selector: '.blog-articles-heading', key: 'blog_articles_heading' },
     { selector: '.blog-article1-title', key: 'blog_article1_title' },
     { selector: '.blog-article1-meta', key: 'blog_article1_meta' },
@@ -199,6 +201,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const modeSelection = document.getElementById('mode-selection'); // New
 
         const trainerInstruction = document.querySelector('.trainer-instruction'); // Get instruction element
+        const valorantRankDisplay = document.getElementById('valorant-rank-display'); // New
+        const estimatedRankSpan = document.getElementById('estimated-rank'); // New
 
         const reactionBox = document.getElementById('reaction-box');
         const startButton = document.getElementById('start-button');
@@ -237,7 +241,10 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         // --- Event Listeners for Settings ---
-        gameSelection.addEventListener('change', saveSettings);
+        gameSelection.addEventListener('change', () => {
+            saveSettings();
+            updateScoresDisplay(); // Update display for rank visibility
+        });
         modeSelection.addEventListener('change', () => {
             saveSettings();
             updateTrainerInstruction(); // Update instruction when mode changes
@@ -258,10 +265,34 @@ document.addEventListener('DOMContentLoaded', () => {
                 const sum = scores.reduce((a, b) => a + b, 0);
                 const average = sum / scores.length;
                 averageScoreSpan.textContent = average.toFixed(0);
+
+                // Calculate and display Valorant rank if game is Valorant
+                if (gameSettings.game === 'valorant') {
+                    valorantRankDisplay.style.display = 'block';
+                    estimatedRankSpan.textContent = calculateValorantRank(average);
+                } else {
+                    valorantRankDisplay.style.display = 'none';
+                }
+
             } else {
                 averageScoreSpan.textContent = '0';
+                valorantRankDisplay.style.display = 'none'; // Hide if no scores
             }
             bestScoreSpan.textContent = bestScore;
+        }
+
+        function calculateValorantRank(avgReactionTime) {
+            // This is a simplified estimation based on general human reaction times.
+            // Real Valorant rank depends on many factors.
+            if (avgReactionTime <= 150) return translations[currentLanguage]['rank_radiant'];
+            if (avgReactionTime <= 170) return translations[currentLanguage]['rank_immortal'];
+            if (avgReactionTime <= 190) return translations[currentLanguage]['rank_ascendant'];
+            if (avgReactionTime <= 210) return translations[currentLanguage]['rank_diamond'];
+            if (avgReactionTime <= 230) return translations[currentLanguage]['rank_platinum'];
+            if (avgReactionTime <= 250) return translations[currentLanguage]['rank_gold'];
+            if (avgReactionTime <= 280) return translations[currentLanguage]['rank_silver'];
+            if (avgReactionTime <= 320) return translations[currentLanguage]['rank_bronze'];
+            return translations[currentLanguage]['rank_iron'];
         }
 
         function saveScores() {

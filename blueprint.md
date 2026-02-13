@@ -40,6 +40,10 @@ This blueprint outlines the development plan for a production-ready, fully stati
   - Box changes through random colors.
   - User clicks only when a specific target color (blue) appears.
   - Incorrect clicks (wrong color or too early) reset the game.
+- Estimated Valorant rank system:
+  - Based on average reaction time.
+  - Only applies when Valorant is selected.
+  - Ranks: Iron, Bronze, Silver, Gold, Platinum, Diamond, Ascendant, Immortal, Radiant.
 
 ## SEO
 - Optimized title and description (`<title>`, `<meta name="description">`)
@@ -129,3 +133,8 @@ This blueprint outlines the development plan for a production-ready, fully stati
     *   Modify `training.html` to add new mode to dropdown. (Completed)
     *   Modify `script.js` to implement mode-specific game logic and UI updates. (Completed)
     *   Verify `style.css` does not require specific changes for new mode (Confirmed). (Completed)
+22. Add estimated Valorant rank system:
+    *   Modify `translations.json` to add rank labels. (Completed)
+    *   Modify `training.html` to add rank display element. (Completed)
+    *   Modify `script.js` to implement rank calculation and display logic. (Completed)
+    *   Verify `style.css` does not require specific changes for rank display (Confirmed). (Completed)
