@@ -30,6 +30,13 @@ This blueprint outlines the development plan for a production-ready, fully stati
 - Best score stored in `localStorage`
 - Average score calculation
 - No real-time database
+- Pre-game settings screen in `training.html`:
+  - Game selection dropdown: Valorant, Overwatch 2, PUBG
+  - Sensitivity slider (1–100)
+  - Show selected sensitivity value
+  - Save selected settings in `localStorage`
+  - Apply settings before game starts
+  - Clean UI design matching dark gamer theme
 
 ## SEO
 - Optimized title and description (`<title>`, `<meta name="description">`)
@@ -104,3 +111,8 @@ This blueprint outlines the development plan for a production-ready, fully stati
     *   Modify `script.js` to implement translation system. (Completed)
     *   Modify all HTML files to include `lang="ko"`, language toggle, translation classes, and Korean SEO meta tags. (Completed)
     *   Add basic CSS for the language toggle button to `style.css`. (Completed)
+19. Add a pre-game settings screen in `training.html`:
+    *   Modify `training.html` to add settings screen UI. (Completed)
+    *   Modify `translations.json` to add new translation keys. (Completed)
+    *   Modify `script.js` to implement settings logic (load/save, apply, UI interaction). (Completed)
+    *   Modify `style.css` to add styling for settings screen. (Completed)

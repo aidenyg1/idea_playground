@@ -28,6 +28,12 @@ const elementsToTranslate = [
     { selector: '.average-score-label', key: 'average_score' },
     { selector: '.start-test-button', key: 'start_test_button' },
     { selector: '.reset-scores-button', key: 'reset_scores_button' },
+    { selector: '.game-selection-label', key: 'game_selection_label' },
+    { selector: '#game-selection option[value="valorant"]', key: 'game_valorant' },
+    { selector: '#game-selection option[value="overwatch2"]', key: 'game_overwatch2' },
+    { selector: '#game-selection option[value="pubg"]', key: 'game_pubg' },
+    { selector: '.sensitivity-label', key: 'sensitivity_label' },
+    { selector: '.apply-settings-button', key: 'apply_settings_button' },
     { selector: '.blog-articles-heading', key: 'blog_articles_heading' },
     { selector: '.blog-article1-title', key: 'blog_article1_title' },
     { selector: '.blog-article1-meta', key: 'blog_article1_meta' },
@@ -49,7 +55,6 @@ const elementsToTranslate = [
     { selector: '.about-get-started-desc', key: 'about_get_started_desc' }
 ];
 
-
 async function loadTranslations() {
     try {
         const response = await fetch('/translations.json');
@@ -65,8 +70,10 @@ function translateUI() {
         const elements = document.querySelectorAll(item.selector);
         elements.forEach(element => {
             if (translations[currentLanguage] && translations[currentLanguage][item.key]) {
-                // Handle innerHTML for elements with potential HTML content (like about_get_started_desc)
-                if (item.key.includes('_desc') || item.key.includes('_welcome')) {
+                if (item.selector.includes('option')) { // Handle option elements specifically
+                    element.textContent = translations[currentLanguage][item.key];
+                }
+                else if (item.key.includes('_desc') || item.key.includes('_welcome')) {
                     element.innerHTML = translations[currentLanguage][item.key];
                 } else if (element.tagName === 'INPUT' || element.tagName === 'BUTTON') {
                     element.value = translations[currentLanguage][item.key];
@@ -140,7 +147,6 @@ function translateUI() {
     }
 }
 
-
 function setLanguage(lang) {
     currentLanguage = lang;
     localStorage.setItem('lang', lang);
@@ -160,7 +166,6 @@ document.addEventListener('DOMContentLoaded', () => {
             setLanguage('ko'); // Default to Korean
         }
     });
-
 
     // Smooth scroll for anchor links (if any)
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
@@ -184,6 +189,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Core logic for the FPS Reaction Time Training game (only on training.html)
     if (document.body.id === 'training-page') { // Add an ID to the body of training.html for conditional loading
+        const settingsScreen = document.getElementById('settings-screen');
+        const gameArea = document.getElementById('game-area');
+        const applySettingsButton = document.getElementById('apply-settings-button');
+        const gameSelection = document.getElementById('game-selection');
+        const sensitivitySlider = document.getElementById('sensitivity-slider');
+        const sensitivityValueSpan = document.getElementById('sensitivity-value');
+
         const reactionBox = document.getElementById('reaction-box');
         const startButton = document.getElementById('start-button');
         const lastScoreSpan = document.getElementById('last-score');
@@ -197,6 +209,40 @@ document.addEventListener('DOMContentLoaded', () => {
         let waitingForClick = false;
         let scores = JSON.parse(localStorage.getItem('reactionScores')) || [];
         let bestScore = localStorage.getItem('bestReactionScore') || 0;
+
+        // Game Settings
+        let gameSettings = JSON.parse(localStorage.getItem('gameSettings')) || {
+            game: 'valorant',
+            sensitivity: 50
+        };
+
+        // --- Settings UI Functions ---
+        function loadSettings() {
+            gameSelection.value = gameSettings.game;
+            sensitivitySlider.value = gameSettings.sensitivity;
+            sensitivityValueSpan.textContent = gameSettings.sensitivity;
+        }
+
+        function saveSettings() {
+            gameSettings.game = gameSelection.value;
+            gameSettings.sensitivity = parseInt(sensitivitySlider.value);
+            localStorage.setItem('gameSettings', JSON.stringify(gameSettings));
+        }
+
+        // --- Event Listeners for Settings ---
+        gameSelection.addEventListener('change', saveSettings);
+        sensitivitySlider.addEventListener('input', () => {
+            sensitivityValueSpan.textContent = sensitivitySlider.value;
+            saveSettings();
+        });
+
+        applySettingsButton.addEventListener('click', () => {
+            saveSettings(); // Save settings when apply button is clicked
+            settingsScreen.style.display = 'none';
+            gameArea.style.display = 'block';
+            resetGame(); // Ensure game is in a clean state
+            updateScoresDisplay(); // Update scores after settings are applied
+        });
 
         // --- Helper Functions ---
         function updateScoresDisplay() {
@@ -269,7 +315,15 @@ document.addEventListener('DOMContentLoaded', () => {
             updateScoresDisplay();
         });
 
-        // Initial display update
+        // Initial setup for training page
+        loadSettings(); // Load settings when page loads
+        if (gameSettings.game && gameSettings.sensitivity) { // If settings exist, show settings screen first
+             settingsScreen.style.display = 'block';
+             gameArea.style.display = 'none';
+        } else { // Otherwise, directly show game area (or default to settings)
+             settingsScreen.style.display = 'block'; // Always start with settings
+             gameArea.style.display = 'none';
+        }
         updateScoresDisplay();
     }
 });

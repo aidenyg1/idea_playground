@@ -53,11 +53,32 @@
     <main>
         <section id="training-game">
             <h2 class="trainer-heading">반응 속도 훈련기</h2>
-            <p class="trainer-instruction">빨간색 상자가 녹색으로 변하면 즉시 클릭하세요!</p>
-            <div id="game-area">
+
+            <!-- Pre-game Settings Screen -->
+            <div id="settings-screen">
+                <div class="settings-group">
+                    <label for="game-selection" class="game-selection-label">게임 선택:</label>
+                    <select id="game-selection" class="settings-select">
+                        <option value="valorant" data-translate-value="game_valorant">발로란트</option>
+                        <option value="overwatch2" data-translate-value="game_overwatch2">오버워치 2</option>
+                        <option value="pubg" data-translate-value="game_pubg">배틀그라운드</option>
+                    </select>
+                </div>
+                <div class="settings-group">
+                    <label for="sensitivity-slider" class="sensitivity-label">감도:</label>
+                    <input type="range" id="sensitivity-slider" min="1" max="100" value="50" class="settings-slider">
+                    <span id="sensitivity-value">50</span>
+                </div>
+                <button id="apply-settings-button" class="button apply-settings-button">훈련 시작!</button>
+            </div>
+
+            <!-- Game Area (initially hidden) -->
+            <div id="game-area" style="display: none;">
+                <p class="trainer-instruction">빨간색 상자가 녹색으로 변하면 즉시 클릭하세요!</p>
                 <div id="reaction-box"></div>
                 <button id="start-button" class="start-test-button">테스트 시작</button>
             </div>
+
             <div id="results">
                 <p class="last-score-label">마지막 반응 시간: <span id="last-score">0</span> ms</p>
                 <p class="best-score-label">최고 점수: <span id="best-score">0</span> ms</p>
