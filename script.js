@@ -214,6 +214,10 @@ document.addEventListener('DOMContentLoaded', () => {
         let bestScore = localStorage.getItem('bestReactionScore') || 0;
         let currentColor = ''; 
 
+        // Removed the rank-related elements since the translation key was commented out in elementsToTranslate
+        // const valorantRankDisplay = document.getElementById('valorant-rank-display');
+        // const estimatedRankSpan = document.getElementById('estimated-rank');
+
         const colors = ['red', 'green', 'blue', 'yellow', 'purple', 'orange'];
         const targetColor = 'blue';
 
@@ -240,6 +244,7 @@ document.addEventListener('DOMContentLoaded', () => {
             console.log("[script.js] Game selection changed.");
             saveSettings();
             updateScoresDisplay();
+            // Removed rank display update since rank system is reverted
         });
         modeSelection.addEventListener('change', () => {
             console.log("[script.js] Mode selection changed.");
@@ -253,11 +258,9 @@ document.addEventListener('DOMContentLoaded', () => {
             settingsScreen.style.display = 'none';
             gameArea.style.display = 'block';
             resetGame(); // Ensure game is in a clean state
-            // Programmatically click the start button to ensure the game start flow is triggered
-            startButton.click();
-            updateScoresDisplay();
-            updateTrainerInstruction();
-            console.log("[script.js] Transitioned from settings to game area and triggered game start.");
+            updateScoresDisplay(); // Update scores after settings are applied
+            updateTrainerInstruction(); // Update instruction based on selected mode
+            console.log("[script.js] Transitioned from settings to game area. Start button enabled for user.");
         });
 
         function updateScoresDisplay() {
@@ -286,7 +289,7 @@ document.addEventListener('DOMContentLoaded', () => {
             console.log("[script.js] resetGame called.");
             reactionBox.style.display = 'none';
             reactionBox.className = '';
-            // Restore start button to initial text and enable it
+            reactionBox.style.backgroundColor = ''; // Clear any inline background color from color reaction mode
             startButton.textContent = translations[currentLanguage]['start_test_button'];
             startButton.disabled = false;
             clearTimeout(timeoutId);
@@ -297,33 +300,37 @@ document.addEventListener('DOMContentLoaded', () => {
 
         startButton.addEventListener('click', () => {
             console.log("[script.js] Start button clicked. Current mode:", gameSettings.mode);
-            // If the button is already disabled (e.g., during a game cycle), ignore further clicks
-            if (startButton.disabled && startButton.textContent !== translations[currentLanguage]['get_ready']) {
-                console.log("[script.js] Start button click ignored: already disabled or game in progress.");
+            if (startButton.disabled) { // Prevent double clicks
+                console.log("[script.js] Start button click ignored: button already disabled.");
                 return;
             }
 
-            startButton.disabled = true;
-            startButton.textContent = translations[currentLanguage]['get_ready'];
-            reactionBox.style.display = 'block';
+            startButton.disabled = true; // Disable to prevent further clicks during game start
+            startButton.textContent = translations[currentLanguage]['get_ready']; // Indicate 'get ready' state
+            reactionBox.style.display = 'block'; // Make reaction box visible
 
             if (gameSettings.mode === 'color_reaction') {
                 console.log("[script.js] Starting Color Reaction Game.");
-                reactionBox.className = 'color-cycle';
+                // For color reaction mode, initial state is the cycling colors
                 startColorReactionGame();
             } else { // Classic mode
                 console.log("[script.js] Starting Classic Mode Game.");
-                reactionBox.className = 'ready';
-                const randomDelay = Math.floor(Math.random() * 3000) + 1500;
+                reactionBox.className = 'red-initial'; // Show red box initially
+                const randomDelay = Math.floor(Math.random() * 3000) + 2000; // 2 to 5 seconds
                 console.log("[script.js] Classic mode: Random delay set to", randomDelay, "ms.");
 
-                timeoutId = setTimeout(() => {
-                    console.log("[script.js] Classic mode: Delay finished, box turning green.");
-                    reactionBox.className = 'go';
-                    startTime = new Date().getTime();
-                    waitingForClick = true;
-                    startButton.textContent = translations[currentLanguage]['click_now'];
-                }, randomDelay);
+                setTimeout(() => { // Short delay for red box to show before turning yellow
+                    reactionBox.className = 'ready'; // Change to yellow
+                    console.log("[script.js] Classic mode: Box turned yellow (ready state).");
+
+                    timeoutId = setTimeout(() => {
+                        console.log("[script.js] Classic mode: Delay finished, box turning green.");
+                        reactionBox.className = 'go'; // Change to green
+                        startTime = new Date().getTime();
+                        waitingForClick = true;
+                        startButton.textContent = translations[currentLanguage]['click_now'];
+                    }, randomDelay);
+                }, 500); // 0.5 second red initial display
             }
         });
 
@@ -337,20 +344,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
             function changeColor() {
                 if (!waitingForClick && cycleCount < randomMaxCycles) {
-                    let randomColor;
+                    let randomColorName;
                     do {
-                        randomColor = colors[Math.floor(Math.random() * colors.length)];
-                    } while (randomColor === currentColor);
+                        randomColorName = colors[Math.floor(Math.random() * colors.length)];
+                    } while (randomColorName === currentColor);
                     
-                    reactionBox.style.backgroundColor = randomColor;
-                    currentColor = randomColor;
+                    reactionBox.className = `color-${randomColorName}`; // Set class for color
+                    currentColor = randomColorName;
                     cycleCount++;
                     console.log("[script.js] Color Reaction: Changed color to", currentColor, "(cycle", cycleCount, ")");
 
                     timeoutId = setTimeout(changeColor, Math.random() * 500 + 300);
                 } else if (!waitingForClick) {
                     console.log("[script.js] Color Reaction: Delay finished, box turning target color (", targetColor, ").");
-                    reactionBox.style.backgroundColor = targetColor;
+                    reactionBox.className = `color-${targetColor}`; // Set class for target color
                     currentColor = targetColor;
                     startTime = new Date().getTime();
                     waitingForClick = true;
@@ -401,12 +408,13 @@ document.addEventListener('DOMContentLoaded', () => {
                     saveScores();
                     resetGame();
                     console.log("[script.js] Classic Mode: Correct click. Reaction time:", reactionTime);
-                } else if (reactionBox.classList.contains('ready')) {
+                } else if (reactionBox.classList.contains('ready')) { // Clicked while yellow
                     alert(translations[currentLanguage]['alert_too_early']);
                     resetGame();
                     console.log("[script.js] Classic Mode: Clicked too early (box was yellow).");
-                } else {
-                     console.log("[script.js] Classic Mode: Clicked before ready state or after game ended. Ignoring.");
+                } else { // Clicked before ready state, or after game ended.
+                     console.log("[script.js] Classic Mode: Clicked in invalid state.");
+                     // No alert for clicks before 'ready' state to avoid spamming
                 }
             }
         });

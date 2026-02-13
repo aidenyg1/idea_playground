@@ -346,13 +346,24 @@ footer a {
     transition: background-color 0.1s ease-in-out;
 }
 
+/* New reactionBox classes for consistent color changes */
+#reaction-box.red-initial {
+    background-color: var(--danger-color); /* Explicit Red */
+}
 #reaction-box.ready {
     background-color: var(--warning-color); /* Yellow for 'get ready' */
 }
-
 #reaction-box.go {
     background-color: var(--success-color); /* Green for 'click me' */
 }
+/* Color Reaction Mode Specifics */
+#reaction-box.color-red { background-color: red; }
+#reaction-box.color-green { background-color: green; }
+#reaction-box.color-blue { background-color: blue; }
+#reaction-box.color-yellow { background-color: yellow; }
+#reaction-box.color-purple { background-color: purple; }
+#reaction-box.color-orange { background-color: orange; }
+
 
 #start-button {
     margin-top: 1rem;
