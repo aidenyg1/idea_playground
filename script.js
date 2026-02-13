@@ -35,6 +35,7 @@ const elementsToTranslate = [
     { selector: '.mode-selection-label', key: 'mode_selection_label' },
     { selector: '#mode-selection option[value="classic"]', key: 'mode_classic' },
     { selector: '#mode-selection option[value="hardcore"]', key: 'mode_hardcore' },
+    { selector: '#mode-selection option[value="color_reaction"]', key: 'mode_color_reaction' },
     { selector: '.apply-settings-button', key: 'apply_settings_button' },
     { selector: '.blog-articles-heading', key: 'blog_articles_heading' },
     { selector: '.blog-article1-title', key: 'blog_article1_title' },
@@ -197,6 +198,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const gameSelection = document.getElementById('game-selection');
         const modeSelection = document.getElementById('mode-selection'); // New
 
+        const trainerInstruction = document.querySelector('.trainer-instruction'); // Get instruction element
+
         const reactionBox = document.getElementById('reaction-box');
         const startButton = document.getElementById('start-button');
         const lastScoreSpan = document.getElementById('last-score');
@@ -210,6 +213,10 @@ document.addEventListener('DOMContentLoaded', () => {
         let waitingForClick = false;
         let scores = JSON.parse(localStorage.getItem('reactionScores')) || [];
         let bestScore = localStorage.getItem('bestReactionScore') || 0;
+        let currentColor = ''; // For Color Reaction Mode
+
+        const colors = ['red', 'green', 'blue', 'yellow', 'purple', 'orange']; // Available colors
+        const targetColor = 'blue'; // Target color for Color Reaction Mode
 
         // Game Settings
         let gameSettings = JSON.parse(localStorage.getItem('gameSettings')) || {
@@ -231,7 +238,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // --- Event Listeners for Settings ---
         gameSelection.addEventListener('change', saveSettings);
-        modeSelection.addEventListener('change', saveSettings); // Save mode on change
+        modeSelection.addEventListener('change', () => {
+            saveSettings();
+            updateTrainerInstruction(); // Update instruction when mode changes
+        });
 
         applySettingsButton.addEventListener('click', () => {
             saveSettings(); // Save settings when apply button is clicked
@@ -239,6 +249,7 @@ document.addEventListener('DOMContentLoaded', () => {
             gameArea.style.display = 'block';
             resetGame(); // Ensure game is in a clean state
             updateScoresDisplay(); // Update scores after settings are applied
+            updateTrainerInstruction(); // Update instruction based on selected mode
         });
 
         // --- Helper Functions ---
@@ -257,6 +268,14 @@ document.addEventListener('DOMContentLoaded', () => {
             localStorage.setItem('reactionScores', JSON.stringify(scores));
             localStorage.setItem('bestReactionScore', bestScore);
         }
+        
+        function updateTrainerInstruction() {
+            if (gameSettings.mode === 'color_reaction') {
+                trainerInstruction.textContent = translations[currentLanguage]['trainer_instruction_color_reaction'];
+            } else {
+                trainerInstruction.textContent = translations[currentLanguage]['trainer_instruction'];
+            }
+        }
 
         function resetGame() {
             reactionBox.style.display = 'none';
@@ -265,42 +284,103 @@ document.addEventListener('DOMContentLoaded', () => {
             startButton.disabled = false;
             clearTimeout(timeoutId);
             waitingForClick = false;
+            currentColor = ''; // Reset color for color reaction mode
         }
 
         // --- Game Logic ---
         startButton.addEventListener('click', () => {
             startButton.disabled = true;
             startButton.textContent = translations[currentLanguage]['get_ready'];
-            reactionBox.className = 'ready'; // Set to yellow
             reactionBox.style.display = 'block';
 
-            const randomDelay = Math.floor(Math.random() * 3000) + 1500; // 1.5 to 4.5 seconds
+            if (gameSettings.mode === 'color_reaction') {
+                reactionBox.className = 'color-cycle'; // Initial state for color reaction
+                startColorReactionGame();
+            } else { // Classic mode
+                reactionBox.className = 'ready'; // Set to yellow
+                const randomDelay = Math.floor(Math.random() * 3000) + 1500; // 1.5 to 4.5 seconds
 
-            timeoutId = setTimeout(() => {
-                reactionBox.className = 'go'; // Set to green
-                startTime = new Date().getTime();
-                waitingForClick = true;
-                startButton.textContent = translations[currentLanguage]['click_now'];
-            }, randomDelay);
+                timeoutId = setTimeout(() => {
+                    reactionBox.className = 'go'; // Set to green
+                    startTime = new Date().getTime();
+                    waitingForClick = true;
+                    startButton.textContent = translations[currentLanguage]['click_now'];
+                }, randomDelay);
+            }
         });
 
-        reactionBox.addEventListener('click', () => {
-            if (waitingForClick) {
-                endTime = new Date().getTime();
-                const reactionTime = endTime - startTime;
-                lastScoreSpan.textContent = reactionTime;
+        function startColorReactionGame() {
+            let cycleCount = 0;
+            const maxCycles = 10; // Max random color changes before target
+            const minCycles = 3;  // Min random color changes before target
+            const randomMaxCycles = Math.floor(Math.random() * (maxCycles - minCycles + 1)) + minCycles;
 
-                scores.push(reactionTime);
-                if (bestScore === 0 || reactionTime < bestScore) {
-                    bestScore = reactionTime;
+            function changeColor() {
+                if (!waitingForClick && cycleCount < randomMaxCycles) {
+                    let randomColor;
+                    do {
+                        randomColor = colors[Math.floor(Math.random() * colors.length)];
+                    } while (randomColor === currentColor); // Avoid same color twice in a row
+                    
+                    reactionBox.style.backgroundColor = randomColor;
+                    currentColor = randomColor;
+                    cycleCount++;
+
+                    timeoutId = setTimeout(changeColor, Math.random() * 500 + 300); // Change color every 0.3-0.8 seconds
+                } else if (!waitingForClick) { // Time to show target color
+                    reactionBox.style.backgroundColor = targetColor;
+                    currentColor = targetColor;
+                    startTime = new Date().getTime();
+                    waitingForClick = true;
+                    startButton.textContent = translations[currentLanguage]['click_now'];
                 }
-                updateScoresDisplay();
-                saveScores();
-                resetGame();
-            } else if (reactionBox.classList.contains('ready')) {
-                // Clicked too early
-                alert(translations[currentLanguage]['alert_too_early']);
-                resetGame();
+            }
+            changeColor();
+        }
+
+        reactionBox.addEventListener('click', () => {
+            if (gameSettings.mode === 'color_reaction') {
+                if (waitingForClick) {
+                    if (currentColor === targetColor) {
+                        endTime = new Date().getTime();
+                        const reactionTime = endTime - startTime;
+                        lastScoreSpan.textContent = reactionTime;
+
+                        scores.push(reactionTime);
+                        if (bestScore === 0 || reactionTime < bestScore) {
+                            bestScore = reactionTime;
+                        }
+                        updateScoresDisplay();
+                        saveScores();
+                        resetGame();
+                    } else {
+                        // Clicked on wrong color
+                        alert(translations[currentLanguage]['alert_wrong_color']);
+                        resetGame();
+                    }
+                } else {
+                    // Clicked too early (before target color appeared)
+                    alert(translations[currentLanguage]['alert_wrong_color']); // Using wrong color alert for early click
+                    resetGame();
+                }
+            } else { // Classic mode
+                if (waitingForClick) {
+                    endTime = new Date().getTime();
+                    const reactionTime = endTime - startTime;
+                    lastScoreSpan.textContent = reactionTime;
+
+                    scores.push(reactionTime);
+                    if (bestScore === 0 || reactionTime < bestScore) {
+                        bestScore = reactionTime;
+                    }
+                    updateScoresDisplay();
+                    saveScores();
+                    resetGame();
+                } else if (reactionBox.classList.contains('ready')) {
+                    // Clicked too early
+                    alert(translations[currentLanguage]['alert_too_early']);
+                    resetGame();
+                }
             }
         });
 
@@ -314,13 +394,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Initial setup for training page
         loadSettings(); // Load settings when page loads
-        if (gameSettings.game && gameSettings.mode) { // If settings exist, show settings screen first
-             settingsScreen.style.display = 'block';
-             gameArea.style.display = 'none';
-        } else { // Otherwise, directly show game area (or default to settings)
-             settingsScreen.style.display = 'block'; // Always start with settings
-             gameArea.style.display = 'none';
-        }
+        settingsScreen.style.display = 'block'; // Always start with settings
+        gameArea.style.display = 'none';
         updateScoresDisplay();
+        updateTrainerInstruction(); // Initial instruction update
     }
 });

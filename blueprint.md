@@ -32,10 +32,14 @@ This blueprint outlines the development plan for a production-ready, fully stati
 - No real-time database
 - Pre-game settings screen in `training.html`:
   - Game selection dropdown: Valorant, Overwatch 2, PUBG
-  - Mode selection dropdown: Classic, Hardcore
+  - Mode selection dropdown: Classic, Hardcore, Color Reaction
   - Save selected settings in `localStorage`
   - Apply settings before game starts
   - Clean UI design matching dark gamer theme
+- New Color Reaction Mode:
+  - Box changes through random colors.
+  - User clicks only when a specific target color (blue) appears.
+  - Incorrect clicks (wrong color or too early) reset the game.
 
 ## SEO
 - Optimized title and description (`<title>`, `<meta name="description">`)
@@ -120,3 +124,8 @@ This blueprint outlines the development plan for a production-ready, fully stati
     *   Modify `translations.json` to remove sensitivity keys and add mode selection keys. (Completed)
     *   Modify `script.js` to remove sensitivity logic and integrate mode selection. (Completed)
     *   Verify `style.css` does not require specific changes for sensitivity (Confirmed). (Completed)
+21. Add a new Color Reaction Mode:
+    *   Modify `translations.json` to add new translation keys for mode. (Completed)
+    *   Modify `training.html` to add new mode to dropdown. (Completed)
+    *   Modify `script.js` to implement mode-specific game logic and UI updates. (Completed)
+    *   Verify `style.css` does not require specific changes for new mode (Confirmed). (Completed)
